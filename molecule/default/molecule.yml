@@ -1,0 +1,23 @@
+---
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -f full
+dependency:
+  name: galaxy
+driver:
+  name: podman
+platforms:
+  - name: hcv-deploy-files
+    image: rockylinux:9
+    pre_build_image: false
+    # dockerfile: Dockerfile.j2
+    privileged: false
+    # command: "/sbin/init"
+provisioner:
+  name: ansible
+  # playbooks:
+  #   converge: ../shared_files/converge.yml
+  #   prepare: ../shared_files/prepare.yml
+verifier:
+  name: ansible

@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include role"
+      ansible.builtin.include_role:
+        # noqa: role-name
+        name: "../../../hcv-deploy-files"
+      vars:
+        git_repo: "git@github.com:truestory1/test-configs01.git"
+        git_version: "master"
