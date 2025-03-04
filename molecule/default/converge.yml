@@ -7,5 +7,7 @@
         # noqa: role-name
         name: "../../../hcv-deploy-files"
       vars:
-        git_repo: "git@github.com:truestory1/hcv-config-01.git"
+        git_user: "truestory"
+        git_password: "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"
+        git_repo: "https://{{ git_user }}:{{ git_password }}@github.com/truestory1/hcv-config-01.git"
         git_version: "master"
