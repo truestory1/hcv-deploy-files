@@ -10,24 +10,15 @@
     dest: "{{ temp_dir.path }}"
     version: "{{ git_version }}"
     force: true
-  # when:
-  #   - git_repo is defined
-  #   - git_version is defined
 
 - name: Use config file from git as variable
   ansible.builtin.slurp:
     src: "{{ temp_dir.path }}/.config.yml"
   register: __temp_var
-  # when:
-  #   - git_repo is defined
-  #   - git_version is defined
 
 - name: Set variable from config file
   ansible.builtin.set_fact:
     __config: "{{ __temp_var.content | b64decode | from_yaml }}"
-  # when:
-  #   - git_repo is defined
-  #   - git_version is defined
 
 - name: Create required directories
   ansible.builtin.file:
@@ -37,8 +28,6 @@
     owner: "{{ item.owner | default(omit) }}"
     group: "{{ item.group | default(omit) }}"
   loop: "{{ __config.directories }}"
-  # when:
-  #   - __config is defined
 
 - name: Deploy files
   ansible.builtin.copy:
@@ -49,8 +38,6 @@
     group: "{{ item.group | default(omit) }}"
     remote_src: yes
   loop: "{{ __config.files }}"
-  # when:
-  #   - __config is defined
 
 - name: Remove temporary directory
   ansible.builtin.file:
