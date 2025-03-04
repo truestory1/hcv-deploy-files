@@ -22,22 +22,26 @@
 
 - name: Create required directories
   ansible.builtin.file:
-    dest: "/{{ item.name }}"
+    dest: "/{{ __loop_config.name }}"
     state: directory
-    mode: "{{ item.mode | default(omit) }}"
-    owner: "{{ item.owner | default(omit) }}"
-    group: "{{ item.group | default(omit) }}"
+    mode: "{{ __loop_config.mode | default(omit) }}"
+    owner: "{{ __loop_config.owner | default(omit) }}"
+    group: "{{ __loop_config.group | default(omit) }}"
   loop: "{{ __config.directories }}"
+  loop_control:
+    loop_var: __loop_config
 
 - name: Deploy files
   ansible.builtin.copy:
-    src: "{{ temp_dir.path }}/{{ item.file }}"
-    dest: "/{{ item.file }}"
-    mode: "{{ item.mode | default(omit) }}"
-    owner: "{{ item.owner | default(omit) }}"
-    group: "{{ item.group | default(omit) }}"
+    src: "{{ temp_dir.path }}/{{ __loop_config.file }}"
+    dest: "/{{ __loop_config.file }}"
+    mode: "{{ __loop_config.mode | default(omit) }}"
+    owner: "{{ __loop_config.owner | default(omit) }}"
+    group: "{{ __loop_config.group | default(omit) }}"
     remote_src: yes
   loop: "{{ __config.files }}"
+  loop_control:
+    loop_var: __loop_config
 
 - name: Remove temporary directory
   ansible.builtin.file:
