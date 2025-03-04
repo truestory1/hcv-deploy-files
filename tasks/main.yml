@@ -27,12 +27,23 @@
     - git_repo is defined
     - git_version is defined
 
-- name: Load config file from git
+- name: Set variable from config file
   ansible.builtin.set_fact:
     __config: "{{ __temp_var.content | b64decode | from_yaml }}"
   when:
     - git_repo is defined
     - git_version is defined
+
+- name: Create required directories
+  ansible.builtin.file:
+    dest: "/{{ item.name }}"
+    state: directory
+    mode: "{{ item.mode | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+  loop: "{{ __config.directories }}"
+  when:
+    - __config is defined
 
 - name: Deploy files
   ansible.builtin.copy:

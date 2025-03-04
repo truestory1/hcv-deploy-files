@@ -8,7 +8,7 @@ dependency:
 driver:
   name: podman
 platforms:
-  - name: hcv-deploy-files
+  - name: hcvdeployfiles01
     image: rockylinux:9
     pre_build_image: false
     # dockerfile: Dockerfile.j2
