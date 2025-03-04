@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # with:
-        #   path: "${{ github.repository }}"
+        with:
+          path: "${{ github.repository }}"
 
       - name: Molecule
         uses: gofrolist/molecule-action@v2
