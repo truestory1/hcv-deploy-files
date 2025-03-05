@@ -6,7 +6,7 @@ lint: |
 dependency:
   name: galaxy
 driver:
-  name: podman
+  name: containers
 platforms:
   - name: hcvdeployfiles01
     image: rockylinux:9
