@@ -5,9 +5,7 @@
     - name: "Include role"
       ansible.builtin.include_role:
         # noqa: role-name
-        name: "../../../hcv-deploy-files"
+        name: "hcv-deploy-files"
       vars:
-        git_user: "truestory"
-        git_password: "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"
-        git_repo: "https://{{ git_user }}:{{ git_password }}@github.com/truestory1/hcv-config-01.git"
-        git_version: "master"
+        git_repo: "/home/an/src/personal/hcv/hcv-servers"
+        git_version: "t01"

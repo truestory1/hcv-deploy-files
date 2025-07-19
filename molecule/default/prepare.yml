@@ -9,4 +9,9 @@
       loop:
         - git
         - tree
-        - mc
+        - rsync
+
+    # - name: Ensure git repository is sync from local host to remote container
+    #   ansible.posix.synchronize:
+    #     src: "/home/an/src/personal/hcv-config-01"
+    #     dest: "/home/an/src/personal/hcv-config-01"

@@ -6,14 +6,17 @@ lint: |
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: containers
 platforms:
-  - name: hcvdeployfiles01
+  - name: server01
     image: rockylinux:9
     pre_build_image: false
     # dockerfile: Dockerfile.j2
     privileged: false
     # command: "/sbin/init"
+    volumes:
+      - /home/an/src/personal/hcv/hcv-config-01:/home/an/src/personal/hcv/hcv-config-01:Z
+      - /home/an/src/personal/hcv/hcv-servers:/home/an/src/personal/hcv/hcv-servers:Z
 provisioner:
   name: ansible
   # playbooks:
