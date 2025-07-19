@@ -25,9 +25,9 @@
     var: __server
 
 - name: Start configuration tasks
-  ansible.builtin.include_tasks: server.yml
+  ansible.builtin.include_tasks: config.yml
   vars:
     __loop_config: "{{ item }}"
   loop: "{{ __server }}"
   loop_control:
-    loop_var: __loop_config
+    loop_var: __loop_server
