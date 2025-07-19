@@ -7,8 +7,8 @@
 - name: Clone git repository
   ansible.builtin.git:
     repo: "{{ __server.repo }}"
-    dest: "{{ temp_dir.path }}"
     version: "{{ __server.version }}"
+    dest: "{{ temp_dir.path }}"
     force: true
 
 - name: Use config file from git as variable
