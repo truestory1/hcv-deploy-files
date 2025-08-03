@@ -3,6 +3,7 @@
   ansible.builtin.tempfile:
     state: directory
   register: temp_dir
+  changed_when: false
 
 - name: Clone git repository
   ansible.builtin.git:
@@ -10,6 +11,7 @@
     version: "{{ __loop_server.version }}"
     dest: "{{ temp_dir.path }}"
     force: true
+  changed_when: false
 
 - name: Use config file from git as variable
   ansible.builtin.slurp:
@@ -47,3 +49,4 @@
   ansible.builtin.file:
     name: "{{ temp_dir.path }}"
     state: absent
+  changed_when: false
