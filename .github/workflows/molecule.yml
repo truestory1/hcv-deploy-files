@@ -37,6 +37,7 @@ jobs:
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "Current directory: $(pwd)"
           ls -la $GITHUB_WORKSPACE
+          tree $GITHUB_WORKSPACE
 
       - name: Molecule
         uses: gofrolist/molecule-action@v2
