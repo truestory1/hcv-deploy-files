@@ -1,0 +1,52 @@
+---
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+  register: temp_dir
+  changed_when: false
+
+- name: Clone git repository
+  ansible.builtin.git:
+    repo: "{{ __loop_server.repo }}"
+    version: "{{ __loop_server.version }}"
+    dest: "{{ temp_dir.path }}"
+    force: true
+  changed_when: false
+
+- name: Use config file from git as variable
+  ansible.builtin.slurp:
+    src: "{{ temp_dir.path }}/.config.yml"
+  register: __temp_var
+
+- name: Set variable from config file
+  ansible.builtin.set_fact:
+    __config: "{{ __temp_var.content | b64decode | from_yaml }}"
+
+- name: Create required directories
+  ansible.builtin.file:
+    dest: "/{{ __loop_config.name }}"
+    state: directory
+    mode: "{{ __loop_config.mode | default(omit) }}"
+    owner: "{{ __loop_config.owner | default(omit) }}"
+    group: "{{ __loop_config.group | default(omit) }}"
+  loop: "{{ __config.directories }}"
+  loop_control:
+    loop_var: __loop_config
+
+- name: Deploy files
+  ansible.builtin.copy:
+    src: "{{ temp_dir.path }}/{{ __loop_config.file }}"
+    dest: "/{{ __loop_config.file }}"
+    mode: "{{ __loop_config.mode | default(omit) }}"
+    owner: "{{ __loop_config.owner | default(omit) }}"
+    group: "{{ __loop_config.group | default(omit) }}"
+    remote_src: true
+  loop: "{{ __config.files }}"
+  loop_control:
+    loop_var: __loop_config
+
+- name: Remove temporary directory
+  ansible.builtin.file:
+    name: "{{ temp_dir.path }}"
+    state: absent
+  changed_when: false
