@@ -10,6 +10,11 @@
         - git
         - tree
 
+    - name: Ensure git repos are marked as safe
+      ansible.builtin.command: |-
+        git config --global --add safe.directory /config/hcv-config-01
+        git config --global --add safe.directory /config/hcv-servers
+
     # - name: Ensure git repository is sync from local host to remote container
     #   ansible.posix.synchronize:
     #     src: "/home/an/src/personal/hcv-config-01"
