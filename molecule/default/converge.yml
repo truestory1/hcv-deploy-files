@@ -8,4 +8,4 @@
         name: "hcv-deploy-files"
       vars:
         git_repo: "/config/hcv-servers"
-        git_version: "t01"
+        git_version: "master"
