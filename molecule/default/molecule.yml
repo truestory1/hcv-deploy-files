@@ -6,7 +6,7 @@ lint: |
 dependency:
   name: galaxy
 driver:
-  name: containers
+  name: docker
 platforms:
   - name: server01
     image: rockylinux:9
