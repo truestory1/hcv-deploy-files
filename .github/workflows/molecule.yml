@@ -23,6 +23,7 @@ jobs:
         with:
           repository: "truestory1/hcv-servers"
           path: "hcv-servers"
+          token: ${{ secrets.GH_PAT }}
 
-      - name: Molecule
-        uses: gofrolist/molecule-action@v2
+      # - name: Molecule
+      #   uses: gofrolist/molecule-action@v2
