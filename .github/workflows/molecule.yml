@@ -25,5 +25,12 @@ jobs:
           path: "hcv-servers"
           token: ${{ secrets.GH_PAT }}
 
-      # - name: Molecule
-      #   uses: gofrolist/molecule-action@v2
+      - name: Checkout hcv-config-01
+        uses: actions/checkout@v4
+        with:
+          repository: "truestory1/hcv-config-01"
+          path: "hcv-config-01"
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Molecule
+        uses: gofrolist/molecule-action@v2
