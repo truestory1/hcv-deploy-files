@@ -9,7 +9,7 @@
     repo: "{{ git_repo }}"
     dest: "{{ temp_dir.path }}"
     version: "{{ git_version }}"
-    force: true
+    # force: true
 
 - name: Use config file from git as variable
   ansible.builtin.slurp:
