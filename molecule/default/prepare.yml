@@ -8,6 +8,7 @@
         state: present
       loop:
         - git
+        - tree
 
     # - name: Ensure git repository is sync from local host to remote container
     #   ansible.posix.synchronize:
