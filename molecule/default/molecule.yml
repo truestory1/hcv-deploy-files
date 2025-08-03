@@ -6,14 +6,17 @@ lint: |
 dependency:
   name: galaxy
 driver:
-  name: podman
+  name: docker
 platforms:
-  - name: hcvdeployfiles01
+  - name: server01
     image: rockylinux:9
     pre_build_image: false
     # dockerfile: Dockerfile.j2
     privileged: false
     # command: "/sbin/init"
+    volumes:
+      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-config-01:/config/hcv-config-01
+      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-servers:/config/hcv-servers
 provisioner:
   name: ansible
   # playbooks:
