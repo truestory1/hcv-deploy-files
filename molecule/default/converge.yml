@@ -7,5 +7,5 @@
         # noqa: role-name
         name: "hcv-deploy-files"
       vars:
-        git_repo: "/home/an/src/personal/hcv/hcv-servers"
+        git_repo: "/config/hcv-servers"
         git_version: "t01"
