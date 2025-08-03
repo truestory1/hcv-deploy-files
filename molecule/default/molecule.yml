@@ -15,8 +15,8 @@ platforms:
     privileged: false
     # command: "/sbin/init"
     volumes:
-      - $GITHUB_WORKSPACE/hcv-config-01:/config/hcv-config-01
-      - $GITHUB_WORKSPACE/hcv-servers:/config/hcv-servers
+      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-config-01:/config/hcv-config-01
+      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-servers:/config/hcv-servers
 provisioner:
   name: ansible
   # playbooks:
