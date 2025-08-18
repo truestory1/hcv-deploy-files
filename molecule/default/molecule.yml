@@ -14,9 +14,9 @@ platforms:
     # dockerfile: Dockerfile.j2
     privileged: false
     # command: "/sbin/init"
-    volumes:
-      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-config-01:/config/hcv-config-01
-      - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-servers:/config/hcv-servers
+    # volumes:
+    #   - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-config-01:/config/hcv-config-01
+    #   - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-servers:/config/hcv-servers
 provisioner:
   name: ansible
   # playbooks:

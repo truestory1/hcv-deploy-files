@@ -7,5 +7,5 @@
         # noqa: role-name
         name: "hcv-deploy-files"
       vars:
-        git_repo: "/config/hcv-servers"
-        git_version: "master"
+        git_repo: "https://github.com/truestory1/hcv-servers"
+        git_version: "t02"
