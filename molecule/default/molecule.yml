@@ -11,16 +11,8 @@ platforms:
   - name: server01
     image: rockylinux:9
     pre_build_image: false
-    # dockerfile: Dockerfile.j2
     privileged: false
-    # command: "/sbin/init"
-    # volumes:
-    #   - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-config-01:/config/hcv-config-01
-    #   - /home/runner/work/hcv-deploy-files/hcv-deploy-files/hcv-servers:/config/hcv-servers
 provisioner:
   name: ansible
-  # playbooks:
-  #   converge: ../shared_files/converge.yml
-  #   prepare: ../shared_files/prepare.yml
 verifier:
   name: ansible

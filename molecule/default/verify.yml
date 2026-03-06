@@ -3,6 +3,15 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Example assertion
+    - name: Check that no temporary directories were left behind
+      ansible.builtin.find:
+        paths: /tmp
+        patterns: "ansible.*"
+        file_type: directory
+      register: __tmp_dirs
+
+    - name: Assert no leftover temp directories
       ansible.builtin.assert:
-        that: true
+        that:
+          - __tmp_dirs.files | length == 0
+        fail_msg: "Temporary directories were not cleaned up"

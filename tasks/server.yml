@@ -28,8 +28,12 @@
 
 - name: Start configuration tasks
   ansible.builtin.include_tasks: config.yml
-  vars:
-    __loop_config: "{{ item }}"
   loop: "{{ __server }}"
   loop_control:
     loop_var: __loop_server
+
+- name: Remove temporary directory
+  ansible.builtin.file:
+    name: "{{ temp_dir.path }}"
+    state: absent
+  changed_when: false

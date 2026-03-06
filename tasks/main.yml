@@ -1,7 +1,3 @@
 ---
-- name: Show tree command output
-  ansible.builtin.debug:
-    var: tree_output.stdout_lines
-
 - name: Download configs for a server
   ansible.builtin.include_tasks: server.yml
