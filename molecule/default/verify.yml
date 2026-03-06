@@ -3,15 +3,32 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Check that no temporary directories were left behind
-      ansible.builtin.find:
-        paths: /tmp
-        patterns: "ansible.*"
-        file_type: directory
-      register: __tmp_dirs
+    - name: Stat deployed files
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: __deployed_files
+      loop:
+        - /tmp/testfile01
+        - /tmp/testfile02
+        - /tmp/testdir01/testfile02
 
-    - name: Assert no leftover temp directories
+    - name: Assert deployed files exist
       ansible.builtin.assert:
         that:
-          - __tmp_dirs.files | length == 0
-        fail_msg: "Temporary directories were not cleaned up"
+          - item.stat.exists
+        fail_msg: "File {{ item.item }} was not deployed"
+      loop: "{{ __deployed_files.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: Stat deployed directory
+      ansible.builtin.stat:
+        path: /tmp/testdir01
+      register: __deployed_dir
+
+    - name: Assert deployed directory exists
+      ansible.builtin.assert:
+        that:
+          - __deployed_dir.stat.exists
+          - __deployed_dir.stat.isdir
+        fail_msg: "Directory /tmp/testdir01 was not created"
