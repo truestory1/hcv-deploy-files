@@ -118,6 +118,8 @@ sudo dnf install git tree
 
 ```
 hcv-deploy-files/
+├── .ansible-lint          # ansible-lint configuration
+├── .gitignore             # Git ignore rules
 ├── README.md              # This documentation
 ├── renovate.json          # Dependency management
 ├── defaults/
@@ -132,7 +134,8 @@ hcv-deploy-files/
 │       ├── Dockerfile.j2
 │       ├── molecule.yml
 │       ├── prepare.yml
-│       └── verify.yml
+│       ├── verify.yml
+│       └── verify_config.yml
 ├── tasks/
 │   ├── config.yml        # Configuration tasks
 │   ├── main.yml          # Main task entry point
@@ -254,7 +257,7 @@ staging:
 
 ### Task Overview
 
-1. **main.yml**: Entry point that displays tree output and includes server tasks
+1. **main.yml**: Entry point that includes server tasks
 2. **server.yml**: Handles server-specific configuration deployment
 3. **config.yml**: Manages individual configuration file deployments
 
@@ -284,9 +287,12 @@ molecule verify
 ### Test Environment
 
 The testing setup includes:
-- **prepare.yml**: Installs dependencies (git, tree) and configures git safe directories
+- **prepare.yml**: Installs dependencies (git)
 - **converge.yml**: Applies the role to test instances
-- **verify.yml**: Validates the deployment results
+- **verify.yml**: Dynamically reads the config chain
+  and validates deployed files/directories
+- **verify_config.yml**: Verifies each config repo's
+  files and directories exist
 - **Dockerfile.j2**: Defines the test container environment
 
 ## Development
