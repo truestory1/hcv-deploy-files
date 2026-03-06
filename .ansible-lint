@@ -1,0 +1,3 @@
+---
+kinds:
+  - tasks: "molecule/**/verify_config.yml"

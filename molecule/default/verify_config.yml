@@ -1,0 +1,57 @@
+---
+- name: Create temporary directory for config verification
+  ansible.builtin.tempfile:
+    state: directory
+  register: __verify_config_temp
+
+- name: Clone config repository
+  ansible.builtin.git:
+    repo: "{{ __verify_config_item.repo }}"
+    dest: "{{ __verify_config_temp.path }}"
+    version: "{{ __verify_config_item.version }}"
+    force: true
+
+- name: Read config file
+  ansible.builtin.slurp:
+    src: "{{ __verify_config_temp.path }}/.config.yml"
+  register: __verify_config_raw
+
+- name: Parse config file
+  ansible.builtin.set_fact:
+    __verify_config: "{{ __verify_config_raw.content | b64decode | from_yaml }}"
+
+- name: Clean up config temp directory
+  ansible.builtin.file:
+    path: "{{ __verify_config_temp.path }}"
+    state: absent
+
+- name: Verify directories exist
+  ansible.builtin.stat:
+    path: "/{{ item.name }}"
+  register: __verify_dir_stat
+  loop: "{{ __verify_config.directories }}"
+
+- name: Assert directories exist
+  ansible.builtin.assert:
+    that:
+      - item.stat.exists
+      - item.stat.isdir
+    fail_msg: "Directory /{{ item.item.name }} was not created"
+  loop: "{{ __verify_dir_stat.results }}"
+  loop_control:
+    label: "/{{ item.item.name }}"
+
+- name: Verify files exist
+  ansible.builtin.stat:
+    path: "/{{ item.file }}"
+  register: __verify_file_stat
+  loop: "{{ __verify_config.files }}"
+
+- name: Assert files exist
+  ansible.builtin.assert:
+    that:
+      - item.stat.exists
+    fail_msg: "File /{{ item.item.file }} was not deployed"
+  loop: "{{ __verify_file_stat.results }}"
+  loop_control:
+    label: "/{{ item.item.file }}"

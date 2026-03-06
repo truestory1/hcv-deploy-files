@@ -1,34 +1,37 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
-    - name: Stat deployed files
-      ansible.builtin.stat:
-        path: "{{ item }}"
-      register: __deployed_files
-      loop:
-        - /tmp/testfile01
-        - /tmp/testfile02
-        - /tmp/testdir01/testfile02
+    - name: Create temporary directory for server config
+      ansible.builtin.tempfile:
+        state: directory
+      register: __verify_temp
 
-    - name: Assert deployed files exist
-      ansible.builtin.assert:
-        that:
-          - item.stat.exists
-        fail_msg: "File {{ item.item }} was not deployed"
-      loop: "{{ __deployed_files.results }}"
+    - name: Clone servers repository
+      ansible.builtin.git:
+        repo: "{{ git_repo }}"
+        dest: "{{ __verify_temp.path }}"
+        version: "{{ git_version }}"
+        force: true
+
+    - name: Read server configuration
+      ansible.builtin.slurp:
+        src: "{{ __verify_temp.path }}/{{ ansible_hostname }}.yaml"
+      register: __verify_server_raw
+
+    - name: Parse server configuration
+      ansible.builtin.set_fact:
+        __verify_server: >-
+          {{ __verify_server_raw.content | b64decode | from_yaml }}
+
+    - name: Clean up servers temp directory
+      ansible.builtin.file:
+        path: "{{ __verify_temp.path }}"
+        state: absent
+
+    - name: Verify deployed configurations
+      ansible.builtin.include_tasks: verify_config.yml
+      loop: "{{ __verify_server }}"
       loop_control:
-        label: "{{ item.item }}"
-
-    - name: Stat deployed directory
-      ansible.builtin.stat:
-        path: /tmp/testdir01
-      register: __deployed_dir
-
-    - name: Assert deployed directory exists
-      ansible.builtin.assert:
-        that:
-          - __deployed_dir.stat.exists
-          - __deployed_dir.stat.isdir
-        fail_msg: "Directory /tmp/testdir01 was not created"
+        loop_var: __verify_config_item

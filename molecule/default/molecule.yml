@@ -14,5 +14,10 @@ platforms:
     privileged: false
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      all:
+        git_repo: "https://github.com/truestory1/hcv-servers"
+        git_version: "master"
 verifier:
   name: ansible
