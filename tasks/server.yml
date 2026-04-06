@@ -2,20 +2,20 @@
 - name: Create temporary directory
   ansible.builtin.tempfile:
     state: directory
-  register: temp_dir
+  register: __temp_dir_server
   changed_when: false
 
 - name: Clone git repository
   ansible.builtin.git:
     repo: "{{ git_repo }}"
-    dest: "{{ temp_dir.path }}"
+    dest: "{{ __temp_dir_server.path }}"
     version: "{{ git_version }}"
     force: true
   changed_when: false
 
 - name: Use config file from git as variable
   ansible.builtin.slurp:
-    src: "{{ temp_dir.path }}/{{ ansible_hostname }}.yaml"
+    src: "{{ __temp_dir_server.path }}/{{ ansible_facts['hostname'] }}.yaml"
   register: __temp_var
 
 - name: Set variable from config file
@@ -33,3 +33,9 @@
   loop: "{{ __server }}"
   loop_control:
     loop_var: __loop_server
+
+- name: Remove temporary directory
+  ansible.builtin.file:
+    name: "{{ __temp_dir_server.path }}"
+    state: absent
+  changed_when: false
