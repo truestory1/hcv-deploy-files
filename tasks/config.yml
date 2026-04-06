@@ -24,7 +24,7 @@
 
 - name: Create required directories
   ansible.builtin.file:
-    dest: "/{{ __loop_dir.name }}"
+    path: "/{{ __loop_dir.name }}"
     state: directory
     mode: "{{ __loop_dir.mode | default(omit) }}"
     owner: "{{ __loop_dir.owner | default(omit) }}"
