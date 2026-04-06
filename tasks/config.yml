@@ -47,6 +47,6 @@
 
 - name: Remove temporary directory
   ansible.builtin.file:
-    name: "{{ __temp_dir_config.path }}"
+    path: "{{ __temp_dir_config.path }}"
     state: absent
   changed_when: false
