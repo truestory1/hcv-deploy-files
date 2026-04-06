@@ -47,7 +47,6 @@ This Ansible role provides a standardized approach to deploy configuration files
 
 ### Target Server Requirements
 - Git package installed
-- Tree package installed (for display output)
 - Sudo privileges for the Ansible user (if modifying system files)
 
 ## Installation
@@ -75,7 +74,7 @@ pip install molecule molecule-docker ansible-lint yamllint
 Install required packages on target servers:
 ```bash
 # On Rocky Linux/RHEL 9
-sudo dnf install git tree
+sudo dnf install git
 ```
 
 ## Quick Start
@@ -254,7 +253,7 @@ staging:
 
 ### Task Overview
 
-1. **main.yml**: Entry point that displays tree output and includes server tasks
+1. **main.yml**: Entry point that includes server tasks
 2. **server.yml**: Handles server-specific configuration deployment
 3. **config.yml**: Manages individual configuration file deployments
 
@@ -284,7 +283,7 @@ molecule verify
 ### Test Environment
 
 The testing setup includes:
-- **prepare.yml**: Installs dependencies (git, tree) and configures git safe directories
+- **prepare.yml**: Installs dependencies (git) and configures git safe directories
 - **converge.yml**: Applies the role to test instances
 - **verify.yml**: Validates the deployment results
 - **Dockerfile.j2**: Defines the test container environment
@@ -436,7 +435,6 @@ This role has no external Ansible role dependencies, making it lightweight and e
 
 ### System Dependencies
 - **git**: Required for repository operations
-- **tree**: Used for directory structure display (optional)
 - **sudo**: Required if deploying files requiring elevated privileges
 
 ### Python Dependencies
@@ -498,10 +496,10 @@ TASK [ns.hcvdeployfiles : Clone git repository] *** FATAL: [server01]: FAILED! =
 **Solution**: The prepare phase installs required packages. For manual installation:
 ```bash
 # Rocky Linux/RHEL 9
-sudo dnf install git tree
+sudo dnf install git
 
 # Ubuntu/Debian
-sudo apt-get install git tree
+sudo apt-get install git
 ```
 
 #### Repository Access Issues
