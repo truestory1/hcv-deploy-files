@@ -5,48 +5,51 @@
   register: __temp_dir_config
   changed_when: false
 
-- name: Clone git repository
-  ansible.builtin.git:
-    repo: "{{ __loop_server.repo }}"
-    version: "{{ __loop_server.version }}"
-    dest: "{{ __temp_dir_config.path }}"
-    force: true
-  changed_when: false
+- name: Manage config files
+  block:
+    - name: Clone git repository
+      ansible.builtin.git:
+        repo: "{{ __loop_server.repo }}"
+        version: "{{ __loop_server.version }}"
+        dest: "{{ __temp_dir_config.path }}"
+        force: true
+      changed_when: false
 
-- name: Use config file from git as variable
-  ansible.builtin.slurp:
-    src: "{{ __temp_dir_config.path }}/.config.yml"
-  register: __temp_var
+    - name: Use config file from git as variable
+      ansible.builtin.slurp:
+        src: "{{ __temp_dir_config.path }}/.config.yml"
+      register: __temp_var
 
-- name: Set variable from config file
-  ansible.builtin.set_fact:
-    __config: "{{ __temp_var.content | b64decode | from_yaml }}"
+    - name: Set variable from config file
+      ansible.builtin.set_fact:
+        __config: "{{ __temp_var.content | b64decode | from_yaml }}"
 
-- name: Create required directories
-  ansible.builtin.file:
-    path: "/{{ __loop_dir.name }}"
-    state: directory
-    mode: "{{ __loop_dir.mode | default(omit) }}"
-    owner: "{{ __loop_dir.owner | default(omit) }}"
-    group: "{{ __loop_dir.group | default(omit) }}"
-  loop: "{{ __config.directories }}"
-  loop_control:
-    loop_var: __loop_dir
+    - name: Create required directories
+      ansible.builtin.file:
+        path: "/{{ __loop_dir.name }}"
+        state: directory
+        mode: "{{ __loop_dir.mode | default(omit) }}"
+        owner: "{{ __loop_dir.owner | default(omit) }}"
+        group: "{{ __loop_dir.group | default(omit) }}"
+      loop: "{{ __config.directories }}"
+      loop_control:
+        loop_var: __loop_dir
 
-- name: Deploy files
-  ansible.builtin.copy:
-    src: "{{ __temp_dir_config.path }}/{{ __loop_file.file }}"
-    dest: "/{{ __loop_file.file }}"
-    mode: "{{ __loop_file.mode | default(omit) }}"
-    owner: "{{ __loop_file.owner | default(omit) }}"
-    group: "{{ __loop_file.group | default(omit) }}"
-    remote_src: true
-  loop: "{{ __config.files }}"
-  loop_control:
-    loop_var: __loop_file
+    - name: Deploy files
+      ansible.builtin.copy:
+        src: "{{ __temp_dir_config.path }}/{{ __loop_file.file }}"
+        dest: "/{{ __loop_file.file }}"
+        mode: "{{ __loop_file.mode | default(omit) }}"
+        owner: "{{ __loop_file.owner | default(omit) }}"
+        group: "{{ __loop_file.group | default(omit) }}"
+        remote_src: true
+      loop: "{{ __config.files }}"
+      loop_control:
+        loop_var: __loop_file
 
-- name: Remove temporary directory
-  ansible.builtin.file:
-    path: "{{ __temp_dir_config.path }}"
-    state: absent
-  changed_when: false
+  always:
+    - name: Remove temporary directory
+      ansible.builtin.file:
+        path: "{{ __temp_dir_config.path }}"
+        state: absent
+      changed_when: false
