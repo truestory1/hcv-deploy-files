@@ -40,4 +40,4 @@ jobs:
           tree $GITHUB_WORKSPACE
 
       - name: Molecule
-        uses: gofrolist/molecule-action@c7c34fe77f6696569ef59a74a371db6765dfd18f # v2
+        uses: gofrolist/molecule-action@4152624b1648c3117fd9c8f1fee1e1609cbb9284 # v2
